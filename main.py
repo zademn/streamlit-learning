@@ -22,7 +22,7 @@ def load_data():
     df = df.dropna()
     time.sleep(1)
     st.session_state.df = df
-    data_load_state.text("Data loaded")  # Change the text
+    return df
 
 
 @st.experimental_memo(max_entries=5)
@@ -30,22 +30,15 @@ def get_hist(df, col_name):
     return np.histogram(df[col_name], bins=24)[0]
 
 
-# Flags
-if "is_split" not in st.session_state:
-    st.session_state.is_split = False
-if "is_trained" not in st.session_state:
-    st.session_state.is_trained = False
-
-
 st.title("Predicting house pricing")
 col1, col2 = st.columns(2)
 if "df" not in st.session_state:
     data_load_state = col1.text("Loading data")  # Set text object
+    load_data()
     #st.session_state.df = load_data()
     data_load_state.text("Data loaded")  # Change the text
 else:
     data_load_state = col1.text("Data loaded")
-col2.button("Reload data", on_click=load_data)
 
 df = st.session_state.df
 
